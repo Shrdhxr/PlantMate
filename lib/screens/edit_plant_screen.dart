@@ -1,9 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:plantmate/models/plant.dart';
 import 'package:plantmate/providers/plants_provider.dart';
+import 'package:plantmate/utils/image_helper.dart';
 
 class EditPlantScreen extends ConsumerStatefulWidget {
   final Plant plant;
@@ -148,21 +147,10 @@ class _EditPlantScreenState extends ConsumerState<EditPlantScreen> {
                   width: 2,
                 ),
               ),
-              child: _imagePath.startsWith('assets/')
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        _imagePath,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        File(_imagePath),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: ImageHelper.buildImage(_imagePath),
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -401,12 +389,10 @@ class _EditPlantScreenState extends ConsumerState<EditPlantScreen> {
   }
 
   Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    
-    if (image != null) {
+    final imagePath = await ImageHelper.pickImage();
+    if (imagePath != null) {
       setState(() {
-        _imagePath = image.path;
+        _imagePath = imagePath;
       });
     }
   }

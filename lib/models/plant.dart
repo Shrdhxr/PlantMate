@@ -1,4 +1,6 @@
-import 'dart:convert';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
+import 'package:plantmate/utils/image_helper.dart';
 
 enum SunlightPreference { low, medium, high }
 enum PlantCategory { indoor, outdoor, succulent, herb, ornamental }
@@ -162,5 +164,10 @@ class Plant {
     if (lastRepotted == null) return true;
     final monthsElapsed = DateTime.now().difference(lastRepotted!).inDays ~/ 30;
     return monthsElapsed >= repottingFrequencyMonths;
+  }
+  
+  // Helper method to get the appropriate image widget based on platform
+  Widget getImage({BoxFit fit = BoxFit.cover}) {
+    return ImageHelper.buildImage(imagePath, fit: fit);
   }
 }

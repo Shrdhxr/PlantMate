@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:plantmate/models/plant.dart';
+import 'package:plantmate/utils/image_helper.dart';
 
 class PlantListItem extends StatelessWidget {
   final Plant plant;
@@ -27,27 +27,7 @@ class PlantListItem extends StatelessWidget {
               child: SizedBox(
                 height: 120,
                 width: double.infinity,
-                child: plant.imagePath.startsWith('assets/')
-                    ? Image.asset(
-                        plant.imagePath,
-                        fit: BoxFit.cover,
-                      )
-                    : Image.file(
-                        File(plant.imagePath),
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: Icon(
-                                Icons.broken_image,
-                                size: 48,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                child: ImageHelper.buildImage(plant.imagePath),
               ),
             ),
             Padding(

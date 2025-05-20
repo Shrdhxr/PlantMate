@@ -49,9 +49,9 @@
     "categories": [0, 2],
     "tags": ["medicinal", "succulent"],
     "dateAdded": "2023-03-10T09:15:00.000Z",
-    "lastWatered": "2023-05-05T16:20:00.000Z",
-    "lastFertilized": "2023-03-15T14:30:00.000Z",
-    "lastRepotted": "2022-08-10T13:45:00.000Z"
+    "lastWatered": "2023-05-08T16:20:00.000Z",
+    "lastFertilized": "2023-03-15T11:30:00.000Z",
+    "lastRepotted": "2022-08-05T13:45:00.000Z"
   },
   {
     "id": "4",
@@ -64,12 +64,12 @@
     "wateringFrequencyDays": 3,
     "fertilizingFrequencyDays": 14,
     "repottingFrequencyMonths": 6,
-    "categories": [0, 3],
+    "categories": [1, 3],
     "tags": ["herb", "edible", "kitchen"],
-    "dateAdded": "2023-04-20T11:45:00.000Z",
+    "dateAdded": "2023-04-20T14:45:00.000Z",
     "lastWatered": "2023-05-14T08:00:00.000Z",
     "lastFertilized": "2023-05-07T09:30:00.000Z",
-    "lastRepotted": "2023-01-15T10:15:00.000Z"
+    "lastRepotted": "2023-01-10T16:15:00.000Z"
   },
   {
     "id": "5",
@@ -79,14 +79,14 @@
     "sunlightPreference": 0,
     "minTemperature": 18.0,
     "maxTemperature": 28.0,
-    "wateringFrequencyDays": 5,
-    "fertilizingFrequencyDays": 30,
-    "repottingFrequencyMonths": 12,
+    "wateringFrequencyDays": 7,
+    "fertilizingFrequencyDays": 45,
+    "repottingFrequencyMonths": 18,
     "categories": [0, 4],
     "tags": ["air-purifying", "flowering"],
-    "dateAdded": "2023-01-25T13:20:00.000Z",
+    "dateAdded": "2023-05-01T11:30:00.000Z",
     "lastWatered": "2023-05-13T17:00:00.000Z",
-    "lastFertilized": "2023-04-15T15:45:00.000Z",
-    "lastRepotted": "2022-12-05T12:30:00.000Z"
+    "lastFertilized": "2023-04-15T10:45:00.000Z",
+    "lastRepotted": "2022-12-20T15:30:00.000Z"
   }
 ]

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:plantmate/models/plant.dart';
 import 'package:plantmate/models/care_log.dart';
 
@@ -9,56 +11,120 @@ class StorageService {
   static const String _plantsFileName = 'plants.json';
   static const String _careLogsFileName = 'care_logs.json';
   static const String _initialPlantsAsset = 'assets/data/initial_plants.json';
+  
+  // SharedPreferences keys for web platform
+  static const String _plantsKey = 'plants_data';
+  static const String _careLogsKey = 'care_logs_data';
 
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
+  Future<void> initializeStorage() async {
+    if (kIsWeb) {
+      await _initializeWebStorage();
+    } else {
+      await _initializeNativeStorage();
+    }
   }
 
-  Future<File> get _plantsFile async {
+  // Web platform initialization
+  Future<void> _initializeWebStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    if (!prefs.containsKey(_plantsKey)) {
+      // Load initial plants data from assets
+      final initialPlantsJson = await rootBundle.loadString(_initialPlantsAsset);
+      await prefs.setString(_plantsKey, initialPlantsJson);
+    }
+
+    if (!prefs.containsKey(_careLogsKey)) {
+      // Create empty care logs
+      await prefs.setString(_careLogsKey, jsonEncode([]));
+    }
+  }
+
+  // Native platform initialization
+  Future<void> _initializeNativeStorage() async {
+    try {
+      final plantsFile = await _getPlantsFile();
+      final careLogsFile = await _getCareLogsFile();
+
+      if (!await plantsFile.exists()) {
+        // Load initial plants data from assets
+        final initialPlantsJson = await rootBundle.loadString(_initialPlantsAsset);
+        await plantsFile.writeAsString(initialPlantsJson);
+      }
+
+      if (!await careLogsFile.exists()) {
+        // Create empty care logs file
+        await careLogsFile.writeAsString(jsonEncode([]));
+      }
+    } catch (e) {
+      print('Error initializing native storage: $e');
+      // Fallback to web storage if native fails
+      await _initializeWebStorage();
+    }
+  }
+
+  // Helper methods for file access
+  Future<String> get _localPath async {
+    if (kIsWeb) return '';
+    
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      return directory.path;
+    } catch (e) {
+      print('Error getting local path: $e');
+      return '';
+    }
+  }
+
+  Future<File> _getPlantsFile() async {
     final path = await _localPath;
     return File('$path/$_plantsFileName');
   }
 
-  Future<File> get _careLogsFile async {
+  Future<File> _getCareLogsFile() async {
     final path = await _localPath;
     return File('$path/$_careLogsFileName');
-  }
-
-  // Initialize storage with sample data if needed
-  Future<void> initializeStorage() async {
-    final plantsFile = await _plantsFile;
-    final careLogsFile = await _careLogsFile;
-
-    if (!await plantsFile.exists()) {
-      // Load initial plants data from assets
-      final initialPlantsJson = await rootBundle.loadString(_initialPlantsAsset);
-      await plantsFile.writeAsString(initialPlantsJson);
-    }
-
-    if (!await careLogsFile.exists()) {
-      // Create empty care logs file
-      await careLogsFile.writeAsString(jsonEncode([]));
-    }
   }
 
   // Plants CRUD operations
   Future<List<Plant>> getPlants() async {
     try {
-      final file = await _plantsFile;
-      final contents = await file.readAsString();
-      final List<dynamic> plantsJson = jsonDecode(contents);
-      return plantsJson.map((json) => Plant.fromJson(json)).toList();
+      if (kIsWeb) {
+        final prefs = await SharedPreferences.getInstance();
+        final contents = prefs.getString(_plantsKey) ?? '[]';
+        final List<dynamic> plantsJson = jsonDecode(contents);
+        return plantsJson.map((json) => Plant.fromJson(json)).toList();
+      } else {
+        final file = await _getPlantsFile();
+        final contents = await file.readAsString();
+        final List<dynamic> plantsJson = jsonDecode(contents);
+        return plantsJson.map((json) => Plant.fromJson(json)).toList();
+      }
     } catch (e) {
+      print('Error getting plants: $e');
       // If there's an error, return an empty list
       return [];
     }
   }
 
   Future<void> savePlants(List<Plant> plants) async {
-    final file = await _plantsFile;
     final plantsJson = plants.map((plant) => plant.toJson()).toList();
-    await file.writeAsString(jsonEncode(plantsJson));
+    final jsonString = jsonEncode(plantsJson);
+    
+    try {
+      if (kIsWeb) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString(_plantsKey, jsonString);
+      } else {
+        final file = await _getPlantsFile();
+        await file.writeAsString(jsonString);
+      }
+    } catch (e) {
+      print('Error saving plants: $e');
+      // Fallback to web storage if native fails
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_plantsKey, jsonString);
+    }
   }
 
   Future<void> addPlant(Plant plant) async {
@@ -90,11 +156,19 @@ class StorageService {
   // Care Logs CRUD operations
   Future<List<CareLog>> getCareLogs() async {
     try {
-      final file = await _careLogsFile;
-      final contents = await file.readAsString();
-      final List<dynamic> logsJson = jsonDecode(contents);
-      return logsJson.map((json) => CareLog.fromJson(json)).toList();
+      if (kIsWeb) {
+        final prefs = await SharedPreferences.getInstance();
+        final contents = prefs.getString(_careLogsKey) ?? '[]';
+        final List<dynamic> logsJson = jsonDecode(contents);
+        return logsJson.map((json) => CareLog.fromJson(json)).toList();
+      } else {
+        final file = await _getCareLogsFile();
+        final contents = await file.readAsString();
+        final List<dynamic> logsJson = jsonDecode(contents);
+        return logsJson.map((json) => CareLog.fromJson(json)).toList();
+      }
     } catch (e) {
+      print('Error getting care logs: $e');
       // If there's an error, return an empty list
       return [];
     }
@@ -106,9 +180,23 @@ class StorageService {
   }
 
   Future<void> saveCareLogs(List<CareLog> logs) async {
-    final file = await _careLogsFile;
     final logsJson = logs.map((log) => log.toJson()).toList();
-    await file.writeAsString(jsonEncode(logsJson));
+    final jsonString = jsonEncode(logsJson);
+    
+    try {
+      if (kIsWeb) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString(_careLogsKey, jsonString);
+      } else {
+        final file = await _getCareLogsFile();
+        await file.writeAsString(jsonString);
+      }
+    } catch (e) {
+      print('Error saving care logs: $e');
+      // Fallback to web storage if native fails
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_careLogsKey, jsonString);
+    }
   }
 
   Future<void> addCareLog(CareLog log) async {

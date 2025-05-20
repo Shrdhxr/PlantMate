@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,7 @@ import 'package:plantmate/providers/care_logs_provider.dart';
 import 'package:plantmate/screens/edit_plant_screen.dart';
 import 'package:plantmate/screens/add_care_log_screen.dart';
 import 'package:plantmate/widgets/care_log_list.dart';
+import 'package:plantmate/utils/image_helper.dart';
 
 class PlantDetailScreen extends ConsumerWidget {
   final Plant plant;
@@ -99,27 +101,7 @@ class PlantDetailScreen extends ConsumerWidget {
     return SizedBox(
       width: double.infinity,
       height: 250,
-      child: plant.imagePath.startsWith('assets/')
-          ? Image.asset(
-              plant.imagePath,
-              fit: BoxFit.cover,
-            )
-          : Image.file(
-              File(plant.imagePath),
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey[300],
-                  child: const Center(
-                    child: Icon(
-                      Icons.broken_image,
-                      size: 64,
-                      color: Colors.grey,
-                    ),
-                  ),
-                );
-              },
-            ),
+      child: ImageHelper.buildImage(plant.imagePath),
     );
   }
 

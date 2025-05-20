@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:plantmate/providers/theme_provider.dart';
+import 'package:plantmate/providers/plants_provider.dart';  // Added import
 import 'package:plantmate/screens/home_screen.dart';
 import 'package:plantmate/utils/theme.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:plantmate/services/cross_platform_storage_service.dart';  // Updated import
 
 void main() async {
+  // This must be called before any plugin usage
   WidgetsFlutterBinding.ensureInitialized();
-  getApplicationDocumentsDirectory();
+  
+  // Initialize storage service
+  final storageService = CrossPlatformStorageService();  // Updated service type
+  await storageService.initializeStorage();
+  
   final sharedPreferences = await SharedPreferences.getInstance();
   
   runApp(
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+        storageServiceProvider.overrideWithValue(storageService),
       ],
       child: const MyApp(),
     ),

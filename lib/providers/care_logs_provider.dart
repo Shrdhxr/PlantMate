@@ -1,7 +1,6 @@
-import 'package:plantmate/providers/plants_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plantmate/models/care_log.dart';
-import 'package:plantmate/services/storage_service.dart';
+import 'package:plantmate/providers/plants_provider.dart';
 import 'package:uuid/uuid.dart';
 
 final careLogsProvider = StateNotifierProvider<CareLogsNotifier, AsyncValue<List<CareLog>>>((ref) {
@@ -19,7 +18,7 @@ final plantCareLogsProvider = Provider.family<AsyncValue<List<CareLog>>, String>
 });
 
 class CareLogsNotifier extends StateNotifier<AsyncValue<List<CareLog>>> {
-  final StorageService _storageService;
+  final _storageService;
   final _uuid = const Uuid();
   
   CareLogsNotifier(this._storageService) : super(const AsyncValue.loading()) {
