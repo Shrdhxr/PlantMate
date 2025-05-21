@@ -121,21 +121,17 @@ class StatisticsScreen extends ConsumerWidget {
                     );
                   }
                   
-                  // Group logs by date (last 7 days)
                   final now = DateTime.now();
                   final sevenDaysAgo = now.subtract(const Duration(days: 7));
                   
-                  // Create a map of date to count
                   final Map<DateTime, int> activityByDate = {};
                   
-                  // Initialize all 7 days with 0
                   for (int i = 0; i < 7; i++) {
                     final date = now.subtract(Duration(days: i));
                     final dateWithoutTime = DateTime(date.year, date.month, date.day);
                     activityByDate[dateWithoutTime] = 0;
                   }
                   
-                  // Count logs for each day
                   for (final log in logs) {
                     if (log.date.isAfter(sevenDaysAgo)) {
                       final dateWithoutTime = DateTime(log.date.year, log.date.month, log.date.day);
@@ -143,7 +139,6 @@ class StatisticsScreen extends ConsumerWidget {
                     }
                   }
                   
-                  // Sort dates
                   final sortedDates = activityByDate.keys.toList()
                     ..sort((a, b) => a.compareTo(b));
                   
@@ -267,7 +262,6 @@ class StatisticsScreen extends ConsumerWidget {
                     );
                   }
                   
-                  // Count plants by category
                   final Map<PlantCategory, int> plantsByCategory = {};
                   
                   for (final category in PlantCategory.values) {
@@ -280,7 +274,6 @@ class StatisticsScreen extends ConsumerWidget {
                     }
                   }
                   
-                  // Filter out categories with 0 plants
                   final nonEmptyCategories = plantsByCategory.entries
                       .where((entry) => entry.value > 0)
                       .toList();
@@ -368,7 +361,6 @@ class StatisticsScreen extends ConsumerWidget {
                     );
                   }
                   
-                  // Count logs by care type
                   final Map<CareType, int> logsByCareType = {};
                   
                   for (final type in CareType.values) {
@@ -379,7 +371,6 @@ class StatisticsScreen extends ConsumerWidget {
                     logsByCareType[log.careType] = (logsByCareType[log.careType] ?? 0) + 1;
                   }
                   
-                  // Filter out care types with 0 logs
                   final nonEmptyCareTypes = logsByCareType.entries
                       .where((entry) => entry.value > 0)
                       .toList();

@@ -13,7 +13,7 @@ final plantCareLogsProvider = Provider.family<AsyncValue<List<CareLog>>, String>
   
   return careLogsAsync.whenData((logs) {
     return logs.where((log) => log.plantId == plantId).toList()
-      ..sort((a, b) => b.date.compareTo(a.date)); // Sort by date, newest first
+      ..sort((a, b) => b.date.compareTo(a.date)); 
   });
 });
 

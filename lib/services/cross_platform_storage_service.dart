@@ -8,32 +8,25 @@ import 'package:plantmate/models/plant.dart';
 import 'package:plantmate/models/care_log.dart';
 import 'package:plantmate/services/storage_service.dart';
 
-/// A storage service that works on both web and mobile platforms
 class CrossPlatformStorageService extends StorageService {
   static const String _plantsKey = 'plants_data';
   static const String _careLogsKey = 'care_logs_data';
   static const String _initialPlantsAsset = 'assets/data/initial_plants.json';
 
-  // Initialize storage with sample data if needed
   @override
   Future<void> initializeStorage() async {
     final prefs = await SharedPreferences.getInstance();
     
-    // Check if plants data exists
     if (!prefs.containsKey(_plantsKey)) {
-      // Load initial plants data from assets
       final initialPlantsJson = await rootBundle.loadString(_initialPlantsAsset);
       await prefs.setString(_plantsKey, initialPlantsJson);
     }
     
-    // Check if care logs data exists
     if (!prefs.containsKey(_careLogsKey)) {
-      // Create empty care logs
       await prefs.setString(_careLogsKey, jsonEncode([]));
     }
   }
 
-  // Plants CRUD operations
   @override
   Future<List<Plant>> getPlants() async {
     try {
@@ -86,13 +79,11 @@ class CrossPlatformStorageService extends StorageService {
     plants.removeWhere((plant) => plant.id == plantId);
     await savePlants(plants);
     
-    // Also delete associated care logs
     final careLogs = await getCareLogs();
     careLogs.removeWhere((log) => log.plantId == plantId);
     await saveCareLogs(careLogs);
   }
 
-  // Care Logs CRUD operations
   @override
   Future<List<CareLog>> getCareLogs() async {
     try {
@@ -134,7 +125,6 @@ class CrossPlatformStorageService extends StorageService {
     logs.add(log);
     await saveCareLogs(logs);
     
-    // Update the plant's last care date
     final plants = await getPlants();
     final plantIndex = plants.indexWhere((plant) => plant.id == log.plantId);
     

@@ -203,7 +203,6 @@ class _AddCareLogScreenState extends ConsumerState<AddCareLogScreen> {
       
       ref.read(careLogsProvider.notifier).addCareLog(careLog);
       
-      // Update plant's last care date based on care type
       if (_careType == CareType.watering) {
         ref.read(plantsProvider.notifier).waterPlant(widget.plantId);
       } else if (_careType == CareType.fertilizing) {

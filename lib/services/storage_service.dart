@@ -12,7 +12,6 @@ class StorageService {
   static const String _careLogsFileName = 'care_logs.json';
   static const String _initialPlantsAsset = 'assets/data/initial_plants.json';
   
-  // SharedPreferences keys for web platform
   static const String _plantsKey = 'plants_data';
   static const String _careLogsKey = 'care_logs_data';
 
@@ -29,41 +28,34 @@ class StorageService {
     final prefs = await SharedPreferences.getInstance();
     
     if (!prefs.containsKey(_plantsKey)) {
-      // Load initial plants data from assets
       final initialPlantsJson = await rootBundle.loadString(_initialPlantsAsset);
       await prefs.setString(_plantsKey, initialPlantsJson);
     }
 
     if (!prefs.containsKey(_careLogsKey)) {
-      // Create empty care logs
       await prefs.setString(_careLogsKey, jsonEncode([]));
     }
   }
 
-  // Native platform initialization
   Future<void> _initializeNativeStorage() async {
     try {
       final plantsFile = await _getPlantsFile();
       final careLogsFile = await _getCareLogsFile();
 
       if (!await plantsFile.exists()) {
-        // Load initial plants data from assets
         final initialPlantsJson = await rootBundle.loadString(_initialPlantsAsset);
         await plantsFile.writeAsString(initialPlantsJson);
       }
 
       if (!await careLogsFile.exists()) {
-        // Create empty care logs file
         await careLogsFile.writeAsString(jsonEncode([]));
       }
     } catch (e) {
       print('Error initializing native storage: $e');
-      // Fallback to web storage if native fails
       await _initializeWebStorage();
     }
   }
 
-  // Helper methods for file access
   Future<String> get _localPath async {
     if (kIsWeb) return '';
     
@@ -86,7 +78,6 @@ class StorageService {
     return File('$path/$_careLogsFileName');
   }
 
-  // Plants CRUD operations
   Future<List<Plant>> getPlants() async {
     try {
       if (kIsWeb) {
@@ -102,7 +93,6 @@ class StorageService {
       }
     } catch (e) {
       print('Error getting plants: $e');
-      // If there's an error, return an empty list
       return [];
     }
   }
@@ -121,7 +111,6 @@ class StorageService {
       }
     } catch (e) {
       print('Error saving plants: $e');
-      // Fallback to web storage if native fails
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_plantsKey, jsonString);
     }
@@ -147,13 +136,11 @@ class StorageService {
     plants.removeWhere((plant) => plant.id == plantId);
     await savePlants(plants);
     
-    // Also delete associated care logs
     final careLogs = await getCareLogs();
     careLogs.removeWhere((log) => log.plantId == plantId);
     await saveCareLogs(careLogs);
   }
 
-  // Care Logs CRUD operations
   Future<List<CareLog>> getCareLogs() async {
     try {
       if (kIsWeb) {
@@ -169,7 +156,6 @@ class StorageService {
       }
     } catch (e) {
       print('Error getting care logs: $e');
-      // If there's an error, return an empty list
       return [];
     }
   }
@@ -193,7 +179,6 @@ class StorageService {
       }
     } catch (e) {
       print('Error saving care logs: $e');
-      // Fallback to web storage if native fails
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_careLogsKey, jsonString);
     }
@@ -204,7 +189,6 @@ class StorageService {
     logs.add(log);
     await saveCareLogs(logs);
     
-    // Update the plant's last care date
     final plants = await getPlants();
     final plantIndex = plants.indexWhere((plant) => plant.id == log.plantId);
     

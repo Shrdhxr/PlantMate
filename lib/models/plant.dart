@@ -166,7 +166,6 @@ class Plant {
     return monthsElapsed >= repottingFrequencyMonths;
   }
   
-  // Helper method to get the appropriate image widget based on platform
   Widget getImage({BoxFit fit = BoxFit.cover}) {
     return ImageHelper.buildImage(imagePath, fit: fit);
   }

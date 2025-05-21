@@ -117,7 +117,6 @@ class PlantDetailScreen extends ConsumerWidget {
           onPressed: () {
             ref.read(plantsProvider.notifier).waterPlant(plant.id);
             
-            // Add care log
             ref.read(careLogsProvider.notifier).addCareLog(
               CareLog(
                 id: '',
@@ -140,7 +139,6 @@ class PlantDetailScreen extends ConsumerWidget {
           onPressed: () {
             ref.read(plantsProvider.notifier).fertilizePlant(plant.id);
             
-            // Add care log
             ref.read(careLogsProvider.notifier).addCareLog(
               CareLog(
                 id: '',
@@ -163,7 +161,6 @@ class PlantDetailScreen extends ConsumerWidget {
           onPressed: () {
             ref.read(plantsProvider.notifier).repotPlant(plant.id);
             
-            // Add care log
             ref.read(careLogsProvider.notifier).addCareLog(
               CareLog(
                 id: '',
@@ -416,8 +413,8 @@ class PlantDetailScreen extends ConsumerWidget {
           TextButton(
             onPressed: () {
               ref.read(plantsProvider.notifier).deletePlant(plant.id);
-              Navigator.pop(context); // Close dialog
-              Navigator.pop(context); // Go back to plant list
+              Navigator.pop(context);
+              Navigator.pop(context);
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
@@ -429,3 +426,4 @@ class PlantDetailScreen extends ConsumerWidget {
     );
   }
 }
+  
