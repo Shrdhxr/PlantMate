@@ -15,23 +15,29 @@ PlantMate is a Flutter app that helps you organize your plant collection and tra
 
 ---
 
-## 📸 Screenshots
-
-> Add images to `/assets/screenshots/` and link them here.
+## 📸 Images
 
 <!--
-![Home](assets/screenshots/home.png)
-![Details](assets/screenshots/details.png)
-![Add Plant](assets/screenshots/add.png)
--->
+![Screenshots]
+<img width="1131" height="549" alt="MA_SCREENS_1" src="https://github.com/user-attachments/assets/ed57455b-c95f-40d2-a2fb-b34d6e60b75d" />
+<img width="1135" height="546" alt="MA_SCREENS_2" src="https://github.com/user-attachments/assets/9a4a9685-c659-4355-b242-18a01070719e" />
+
+![Wireframes]
+<img width="1085" height="395" alt="MA_WireFrames" src="https://github.com/user-attachments/assets/e3453bbe-a442-484a-bc16-ac4a7e91c5ed" />
+
+![Screen Flow]
+<img width="1389" height="829" alt="App_Flow_MA" src="https://github.com/user-attachments/assets/0576e9cd-c4ef-457b-b817-e6e7863a42a6" />
 
 ---
 
 ## 🛠 Tech Stack
 
 - **Framework:** Flutter (Dart)
+
 - **State Management:** Riverpod or Cubit/BLoC
 - **Storage:** Local JSON files + `shared_preferences`
 - **Media:** `image_picker`
+
 - **Charts:** `fl_chart`
 - **Paths:** `path_provider`
+
