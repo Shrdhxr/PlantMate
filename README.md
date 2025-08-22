@@ -1,6 +1,6 @@
 # 🌱 PlantMate – Plant Care Reminder & Health Tracker
 
-PlantMate is a Flutter app that helps you organize your plant collection and track care routines like **watering**, **fertilizing**, and **repotting**. Add custom photos, log care history, and browse a clean, image-first list of your plants. Data is stored locally using JSON with lightweight preferences via `shared_preferences`.
+PlantMate is a Flutter app that helps you organize your plant collection and track care routines like **watering**, **fertilizing**, and **repotting**. Add custom photos, log care history, and browse a clean, image-first list of your plants.
 
 ---
 
@@ -11,9 +11,7 @@ PlantMate is a Flutter app that helps you organize your plant collection and tra
 - 🕒 **Frequencies & Status** — Store care frequencies per plant and see which ones are due.
 - 🖼️ **Custom Photos** — Pick from gallery or camera to personalize each plant.
 - 🔍 **Search & Filters** — Find plants by name, species, or tags.
-- 🌗 **Theme Toggle** — Light/Dark mode with saved preference.
-- 📊 **Stats (basic)** — View simple charts for plant count and care activity.
-- 💾 **Local Storage** — JSON for plant data + `shared_preferences` for settings.
+- 📊 **Stats** — View simple charts for plant count and care activity.
 
 ---
 
@@ -37,8 +35,3 @@ PlantMate is a Flutter app that helps you organize your plant collection and tra
 - **Media:** `image_picker`
 - **Charts:** `fl_chart`
 - **Paths:** `path_provider`
-
----
-
-## 📂 Project Structure
-
